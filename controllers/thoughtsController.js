@@ -22,7 +22,7 @@ module.exports = {
       res.status(500).json(err)
     }
   },
-  // create a new thought
+
   async createThought(req, res) {
     try {
       const thought = await Thought.create(req.body);
