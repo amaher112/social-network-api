@@ -65,17 +65,13 @@ module.exports = {
       if (!user) {
         return res.status(404).json({ message: "No such user exists" });
       }
-      const thought = await Thought.findOneAndUpdate(
-        { users: req.params.userId },
-        { $pull: { users: req.params.userId } },
-        { new: true }
-      );
+      const thought = await Thought.deleteMany({ _id: { $in: user.thoughts } });
 
-      if (!thought) {
-        return res.status(404).json({
-          message: "User deleted, but no thoughts found",
-        });
-      }
+      // if (!thought) {
+      //   return res.status(404).json({
+      //     message: "User deleted, but no thoughts found",
+      //   });
+      // }
 
       res.json({ message: "User successfully deleted" });
     } catch (err) {
@@ -85,6 +81,42 @@ module.exports = {
   },
 
   // add a new friend
+  async addFriend(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $addToSet: { friends: req.params.friendId } },
+        { new: true }
+      );
 
-  // delete a friend
+      if (!user) {
+        return res.status(404).json({ message: "No user with this id!" });
+      }
+
+      res.json({message: "Friend added!"});
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
+
+  // delete friend
+  async deleteFriend(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friends: req.params.friendId } },
+        { new: true }
+      );
+
+      if (!user) {
+        return res.status(404).json({ message: "No user with this id!" });
+      }
+
+      res.json({message: "Friend deleted!"});
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
 };
