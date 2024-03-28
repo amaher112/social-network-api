@@ -67,11 +67,11 @@ module.exports = {
       }
       const thought = await Thought.deleteMany({ _id: { $in: user.thoughts } });
 
-      // if (!thought) {
-      //   return res.status(404).json({
-      //     message: "User deleted, but no thoughts found",
-      //   });
-      // }
+      if (!thought) {
+        return res.status(404).json({
+          message: "User deleted, but no thoughts found",
+        });
+      }
 
       res.json({ message: "User successfully deleted" });
     } catch (err) {
