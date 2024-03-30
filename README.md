@@ -5,5 +5,6 @@ The purpose of this project was to create a back-end social media application th
 
 ## Usage
 Link to the walkthrough video: 
+https://drive.google.com/file/d/19Q1EIpBgOd_ib_QH6tPlOqElM8mH25I2/view
 
 ![Screenshot](Screenshot.png)
