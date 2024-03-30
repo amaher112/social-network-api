@@ -18,14 +18,23 @@ try {
     //Seed users
     const createdUsers = await User.insertMany(users);
 
+    for (let user of createdUsers) {   
+    const createdThoughts = await Thought.insertMany(
+          thoughts.map((thought) => ({ ...thought, username: user.username }))
+        );
+        await User.findByIdAndUpdate(user._id, {
+          thoughts: createdThoughts.map((thought) => thought._id),
+        });
+      }
+
     //update userIds in thoughts
-    const createdThoughts = thoughts.map((thought) => {
+    const updatedThoughts = thoughts.map((thought) => {
         const user = createdUsers.find(({ username }) => username === thought.username);
         return { ...thought, userId: user._id };
       });
 
     //Seed thoughts
-    await Thought.insertMany(createdThoughts);
+    await Thought.insertMany(updatedThoughts);
 
     console.log('Seed data successfully added!');
 } catch (err) { 
